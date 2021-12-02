@@ -346,7 +346,7 @@ public class IridiumSkyblock extends IridiumCore {
         pluginManager.registerEvents(new BlockBurnListener(), this);
     }
 
-
+    private boolean serverIsDown = false;
 
     /**
      * Saves islands, users and other data to the database.
@@ -356,6 +356,7 @@ public class IridiumSkyblock extends IridiumCore {
         // Todo ? Objectif de ne pas dupliquer la sauvegarde une fois que le serveur est en mode d'extinction
         if (Bukkit.isPrimaryThread()) {
             // Sauvegarde quand le serveur se stop
+            serverIsDown = true;
             saveDataIridium(false);
         } else {
             // Sauvegarde quand le serveur est allumé
@@ -364,36 +365,54 @@ public class IridiumSkyblock extends IridiumCore {
     }
 
     private void saveDataIridium(Boolean isAsync) {
+        // Todo ? Verifier s'il async et si le serveur se stop
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Users");
         getDatabaseManager().getUserTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Islands");
         getDatabaseManager().getIslandTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Invites");
         getDatabaseManager().getIslandInviteTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Permissions");
         getDatabaseManager().getIslandPermissionTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Blocks");
         getDatabaseManager().getIslandBlocksTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Spawners");
+        if (isAsync && serverIsDown) return;
         getDatabaseManager().getIslandSpawnersTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Banks");
         getDatabaseManager().getIslandBankTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Missions");
         getDatabaseManager().getIslandMissionTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Reward");
         getDatabaseManager().getIslandRewardTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Upgrades");
         getDatabaseManager().getIslandUpgradeTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Confiances");
         getDatabaseManager().getIslandTrustedTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Booster");
         getDatabaseManager().getIslandBoosterTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Warps");
         getDatabaseManager().getIslandWarpTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Logs");
         getDatabaseManager().getIslandLogTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Bans");
         getDatabaseManager().getIslandBanTableManager().save();
+        if (isAsync && serverIsDown) return;
         System.out.println("Sauvegarde des Settings");
         getDatabaseManager().getIslandSettingTableManager().save();
         System.out.println("Fin des sauvegardes");
