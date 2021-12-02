@@ -347,18 +347,23 @@ public class IridiumSkyblock extends IridiumCore {
     }
 
 
-    private boolean endSave = true; // Est il en pleine save ?
-    private boolean isEnd = false;
+
     /**
      * Saves islands, users and other data to the database.
      */
     @Override
     public void saveData() {
-        saveDataIridium(true);
+        // Todo ? Objectif de ne pas dupliquer la sauvegarde une fois que le serveur est en mode d'extinction
+        if (Bukkit.isPrimaryThread()) {
+            // Sauvegarde quand le serveur se stop
+            saveDataIridium(false);
+        } else {
+            // Sauvegarde quand le serveur est allumé
+            saveDataIridium(true);
+        }
     }
 
     private void saveDataIridium(Boolean isAsync) {
-        // System.out.println("Démarrage de la sauvegarde en " + (isAsync ? "Async" : "Sync"));
         System.out.println("Sauvegarde des Users");
         getDatabaseManager().getUserTableManager().save();
         System.out.println("Sauvegarde des Islands");
