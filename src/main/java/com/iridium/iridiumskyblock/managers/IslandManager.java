@@ -220,12 +220,13 @@ public class IslandManager {
         if (islandCreateEvent.isCancelled()) return false;
 
         player.sendMessage(StringUtils.color(IridiumSkyblock.getInstance().getMessages().creatingIsland.replace("%prefix%", IridiumSkyblock.getInstance().getConfiguration().prefix)));
-        createIsland(player, user.getName(), islandCreateEvent.getSchematicConfig()).thenAccept(island ->
-                Bukkit.getScheduler().runTask(IridiumSkyblock.getInstance(), () -> {
-                    teleportHome(player, island);
-                    IridiumSkyblock.getInstance().getNms().sendTitle(player, IridiumSkyblock.getInstance().getConfiguration().islandCreateTitle, IridiumSkyblock.getInstance().getConfiguration().islandCreateSubTitle, 20, 40, 20);
-                })
-        );
+        createIsland(player, user.getName(), islandCreateEvent.getSchematicConfig()).thenAccept(island -> {
+            if (island == null) return;
+            Bukkit.getScheduler().runTask(IridiumSkyblock.getInstance(), () -> {
+                teleportHome(player, island);
+                IridiumSkyblock.getInstance().getNms().sendTitle(player, IridiumSkyblock.getInstance().getConfiguration().islandCreateTitle, IridiumSkyblock.getInstance().getConfiguration().islandCreateSubTitle, 20, 40, 20);
+            });
+        });
 
         return true;
     }
@@ -243,10 +244,9 @@ public class IslandManager {
         CompletableFuture<Island> completableFuture = new CompletableFuture<>();
         Bukkit.getScheduler().runTaskAsynchronously(IridiumSkyblock.getInstance(), () -> {
             User user = IridiumSkyblock.getInstance().getUserManager().getUser(player);
-            Island island = new Island(name, schematic);
+            Island island = new Island(name, schematic); // ALTER TABLE islands DROP INDEX `name` / `sqlite_autoindex_islands_1`;
 
             IridiumSkyblock.getInstance().getDatabaseManager().registerIsland(island).join();
-
             // Add Logs Create
             IslandLog islandLog = new IslandLog(island, LogAction.CREATE_ISLAND, user, null, 0, "");
             IridiumSkyblock.getInstance().getDatabaseManager().getIslandLogTableManager().addEntry(islandLog);
@@ -260,7 +260,6 @@ public class IslandManager {
                         "UUID: " + user.getUuid() + "\n" +
                         "Event: IslandManager#createIsland");
             }
-            if (false) IridiumSkyblock.getInstance().saveDataPlayer(user).join(); // Docta - new save
         });
         return completableFuture;
     }
