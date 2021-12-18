@@ -526,8 +526,12 @@ public class IslandManager {
      */
     public @NotNull Optional<Island> getIslandViaLocation(@NotNull Location location) {
         if (!IridiumSkyblockAPI.getInstance().isIslandWorld(location.getWorld())) return Optional.empty();
-        for (Island island : IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getEntries()) {
-            if (island.isInIsland(location)) return Optional.of(island);
+        List<Island> islands = IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getEntries();
+        int islandsSize = islands.size();
+        for (int i = 0; i < islandsSize; i++) {
+            Island island = islands.get(i);
+            if (island == null) continue;
+            if (island.isInIsland(location)) return Optional.empty();
         }
         return Optional.empty();
     }
