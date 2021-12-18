@@ -37,10 +37,21 @@ public class IslandTableManager extends TableManager<Island, Integer> {
         }
     }
 
+    @Override
+    public void delete(Island island) {
+        islandLinkedHashMap.remove(island.getId(), island);
+        super.delete(island);
+    }
+
     public Optional<Island> getIsland(int id) {
         Island island = islandLinkedHashMap.get(id);
         if (island == null) return Optional.empty();
         return Optional.of(island);
+    }
+
+    @Override
+    public List<Island> getEntries() {
+        return islandLinkedHashMap.values().stream().toList();
     }
 
     public LinkedHashMap<Integer, Island> getIslandLinkedHashMap() {
