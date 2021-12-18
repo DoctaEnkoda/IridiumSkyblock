@@ -1,5 +1,6 @@
 package com.iridium.iridiumskyblock.managers.tablemanagers;
 
+import com.iridium.iridiumskyblock.IridiumSkyblock;
 import com.iridium.iridiumskyblock.database.Island;
 import com.iridium.iridiumskyblock.database.User;
 import com.j256.ormlite.support.ConnectionSource;
@@ -30,6 +31,10 @@ public class IslandTableManager extends TableManager<Island, Integer> {
             return;
         }
         islandLinkedHashMap.put(island.getId(), island);
+        if (IridiumSkyblock.getInstance().getConfiguration().debug) {
+            System.out.println("Debugage de la liste : \n" +
+                    "Map : " + islandLinkedHashMap.size());
+        }
     }
 
     public Optional<Island> getIsland(int id) {
