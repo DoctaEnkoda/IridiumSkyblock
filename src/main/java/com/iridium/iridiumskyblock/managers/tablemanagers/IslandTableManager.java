@@ -49,9 +49,9 @@ public class IslandTableManager extends TableManager<Island, Integer> {
         return Optional.of(island);
     }
 
-    @Override
-    public List<Island> getEntries() {
-        return islandLinkedHashMap.values().stream().toList();
+
+    public Collection<Island> getListIsland() {
+        return islandLinkedHashMap.values();
     }
 
     public LinkedHashMap<Integer, Island> getIslandLinkedHashMap() {

@@ -488,7 +488,7 @@ public class IslandManager {
      * @return An Optional with the Island, empty if there is none
      */
     public Optional<Island> getIslandByName(String name) {
-        return IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getEntries().stream().filter(island -> island.getName().equalsIgnoreCase(name)).findFirst();
+        return IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getListIsland().stream().filter(island -> island.getName().equalsIgnoreCase(name)).findFirst();
     }
 
     /**
@@ -526,7 +526,7 @@ public class IslandManager {
      */
     public @NotNull Optional<Island> getIslandViaLocation(@NotNull Location location) {
         if (!IridiumSkyblockAPI.getInstance().isIslandWorld(location.getWorld())) return Optional.empty();
-        List<Island> islands = IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getEntries();
+        List<Island> islands = IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getListIsland().stream().toList();
         int islandsSize = islands.size();
         for (int i = 0; i < islandsSize; i++) {
             Island island = islands.get(i);
@@ -1048,15 +1048,15 @@ public class IslandManager {
     public List<Island> getIslands(SortType sortType) {
         if (sortType == SortType.VALUE) {
             return islandValueSortCache.getCache(() ->
-                    IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getEntries().stream().sorted(Comparator.comparing(Island::getValue).reversed()).collect(Collectors.toList())
+                    IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getListIsland().stream().sorted(Comparator.comparing(Island::getValue).reversed()).collect(Collectors.toList())
             );
         }
         if (sortType == SortType.LEVEL) {
             return islandLevelSortCache.getCache(() ->
-                    IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getEntries().stream().sorted(Comparator.comparing(Island::getExperience).reversed()).collect(Collectors.toList())
+                    IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getListIsland().stream().sorted(Comparator.comparing(Island::getExperience).reversed()).collect(Collectors.toList())
             );
         }
-        return IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getEntries();
+        return new ArrayList<>(IridiumSkyblock.getInstance().getDatabaseManager().getIslandTableManager().getListIsland());
     }
 
     /**
