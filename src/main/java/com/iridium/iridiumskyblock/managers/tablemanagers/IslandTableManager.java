@@ -25,7 +25,7 @@ public class IslandTableManager extends TableManager<Island, Integer> {
 
     @Override
     public void addEntry(Island island) {
-        if (islandLinkedHashMap.containsValue(island)) {
+        if (islandLinkedHashMap.get(island.getId()) != null) {
             System.out.println("Alerte Tentative de Duplication d'entrée !");
             return;
         }
