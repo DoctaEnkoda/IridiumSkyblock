@@ -24,6 +24,8 @@ public class VehicleDamageListener implements Listener {
                     event.setCancelled(true);
                     attacker.sendMessage(StringUtils.color(IridiumSkyblock.getInstance().getMessages().cannotDestroyVehicles.replace("%prefix%", IridiumSkyblock.getInstance().getConfiguration().prefix)));
                 }
+            } else {
+                event.setCancelled(true);
             }
         }
     }

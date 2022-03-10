@@ -22,13 +22,17 @@ public class EntityExplodeListener implements Listener {
         if (list.isEmpty()) return;
         int islandId = list.get(0).asInt();
         Optional<Island> islandOptional = IridiumSkyblock.getInstance().getIslandManager().getIslandById(islandId);
-        if (islandOptional.isEmpty()) return;
-        Island island = islandOptional.get();
-        IslandSetting tntExplosion = IridiumSkyblock.getInstance().getIslandManager().getIslandSetting(island, SettingType.TNT_DAMAGE);
-        if (SettingType.TNT_DAMAGE.isFeactureValue() && !tntExplosion.getBooleanValue()) {
+        if (islandOptional.isEmpty()) {
             event.setCancelled(true);
+        } else {
+            Island island = islandOptional.get();
+            IslandSetting tntExplosion = IridiumSkyblock.getInstance().getIslandManager().getIslandSetting(island, SettingType.TNT_DAMAGE);
+            if (SettingType.TNT_DAMAGE.isFeactureValue() && !tntExplosion.getBooleanValue()) {
+                event.setCancelled(true);
+            }
+            event.blockList().removeIf(block -> !island.isInIsland(block.getLocation()));
         }
-        event.blockList().removeIf(block -> !island.isInIsland(block.getLocation()));
+
     }
 
 }
